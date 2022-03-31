@@ -5,60 +5,43 @@
  * @return {boolean}
  */
 var searchMatrix = function (matrix, target) {
-
-    let row = searchRows(matrix, target);
-    if (row < 0) {
-        return false;
-    }
-    let column = searchColums(matrix, target, row);
-    return column >= 0;
-};
-
-/**
- * @param {number[][]} matrix
- * @param {number} target
- * @return {number}
- */
-function searchRows(matrix, target) {
-    let up = 0;
-    let down = matrix.length - 1;
-
-    while (up <= down) {
-        let mid = up + Math.floor((down - up) / 2);
-        if (matrix[mid][0] === target) {
-            return mid;
-        }
-
-        if (matrix[mid][0] < target) {
-            up = mid + 1;
-        } else {
-            down = mid - 1;
-        }
-    }
-    return down;
-}
-
-/**
- * @param {number[][]} matrix
- * @param {number} target
- * @param {number} row
- * @return {number}
- */
-function searchColums(matrix, target, row) {
+    this.rows = matrix.length;
+    this.columns = matrix[0].length;
     let left = 0;
-    let right = matrix[0].length - 1;
+    let right = rows * columns - 1;
 
     while (left <= right) {
+
         let mid = left + Math.floor((right - left) / 2);
-        if (matrix[row][mid] === target) {
-            return mid;
+        let row = getRowFromIndexFlattenedMatrix(mid);
+        let column = getColumnFromIndexFlattenedMatrix(mid);
+
+        if (matrix[row]
+        [column] === target) {
+            return true;
         }
 
-        if (matrix[row][mid] < target) {
+        if (matrix[row][column] < target) {
             left = mid + 1;
         } else {
             right = mid - 1;
         }
     }
-    return -1;
+    return false;
+};
+
+/**
+ * @param {number} index
+ * @return {number}
+ */
+function  getRowFromIndexFlattenedMatrix(index) {
+    return Math.floor(index / this.columns);
+}
+
+/**
+ * @param {number} index
+ * @return {number}
+ */
+function getColumnFromIndexFlattenedMatrix(index) {
+    return index % this.columns;
 }
